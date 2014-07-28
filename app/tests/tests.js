@@ -25,7 +25,7 @@ test("/", function() {
 
   // helper waiting the application is idle before running the callback
   andThen(function() {
-    equal(find("h2").text(), "Welcome to Ember.js", "Application header is rendered");
-    equal(find("li").length, 3, "There are three items in the list");
+    equal(find("h1").text(), "Alexander L. Wolfe");
+    equal(find("nav li").length, 3, "There are three items in the list");
   });
 });

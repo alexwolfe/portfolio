@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <title>My Site</title>
+
+    <link type="text/css" rel="stylesheet" href="css/normalize.css" />
+    <link type="text/css" rel="stylesheet" href="css/animate.css" />
+    <link type="text/css" rel="stylesheet" href="css/buttons.css" />
+    <link type="text/css" rel="stylesheet" href="css/site.css" />
+  </head>
+<body>
+
+  <!-- //////////////////////////////////////////////////// -->
+  <!-- // PARTIALS //////////////////////////////////////// -->
+  <!-- //////////////////////////////////////////////////// -->
+
+  <!-- TOP NAV -->
+  <script type="text/x-handlebars" data-template-name="_header">
+    <header class="top-nav">
+      <h1>{{#link-to "index"}}Alexander L. Wolfe{{/link-to}}</h1>
+
+      <nav>
+        <ul>
+          <li>{{#link-to 'index'}}About{{/link-to}}</li>
+          <li>{{#link-to 'projects'}}Work{{/link-to}}</li>
+          <li>{{#link-to 'contact'}}Contact{{/link-to}}</li>
+        </ul>
+      </nav>
+    </header>
+  </script>
+
+  <!-- FOOTER -->
+  <script type="text/x-handlebars" data-template-name="_footer">
+    <footer class="footer">
+      <p><small>Made with love by @alexwolfe @firebase</small></p>
+      <p>
+      {{#link-to 'admin' classNames="button button-rounded button-tiny button-border-royal"}}Admin Page{{/link-to}}
+      </p>
+    </footer>
+  </script>
+
+
+  <!-- //////////////////////////////////////////////////// -->
+  <!-- // TEMPLATES /////////////////////////////////////// -->
+  <!-- //////////////////////////////////////////////////// -->
+
+  <!-- APPLICATION LAYOUT -->
+  <script type="text/x-handlebars">
+    {{partial 'header'}}
+    {{outlet}}
+    {{partial 'footer'}}
+  </script>
+
+  <!-- INDEX PAGE -->
+  <script type="text/x-handlebars" data-template-name="index">
+    {{#hero-full model=model}}
+      {{bio-card bio=model classNames="light animated fadeInDown"}}
+    {{/hero-full}}
+
+    <section class="section content-centered">
+      <h2>{{tagline}}</h2>
+      <p class="intro">{{bio}}</p>
+
+      {{#link-to 'projects' classNames="button button-rounded button-large button-border-primary"}}Recent Work{{/link-to}}
+    </section>
+
+  </script>
+
+  <!-- PROJECTS LAYOUT -->
+  <script type="text/x-handlebars" data-template-name="projects">
+    <p>Work</p>
+
+    {{#each project in model}}
+      <h3>{{#link-to 'project' project}}{{project.name}}{{/link-to}}</h3>
+    {{/each}}
+
+    {{outlet}}
+  </script>
+
+  <!-- PROJECTS INDEX PAGE -->
+  <script type="text/x-handlebars" data-template-name="projects/index">
+    <h2>CHOOSE A PROJECT</h2>
+  </script>
+
+  <!-- INDIVIDUAL PROJECT PAGE -->
+  <script type="text/x-handlebars" data-template-name="project">
+    <h1>{{name}}</h1>
+    <h3>{{date}}</h3>
+    <p>{{description}}</p>
+
+    {{#if inprogress}}
+      <h4>IN progress</h4>
+    {{/if}}
+
+    <ul>
+      {{#each tools}}
+        <li>{{name}}</li>
+      {{/each}}
+    </ul>
+  </script>
+
+  <!-- CONTACT PAGE -->
+  <script type="text/x-handlebars" data-template-name="contact">
+    <p>Contact</p>
+  </script>
+
+  <!-- ADMIN PAGE -->
+  <script type="text/x-handlebars" data-template-name="admin">
+    <h1>Admin Panel</h1>
+
+    <h3>Messages</h3>
+
+    <ul>
+      {{#each}}
+        <li {{action 'remove'}}>
+          <h4>{{name}}</h4>
+          <h5>{{email}}</h5>
+          <p>{{message}}</p>
+        </li>
+      {{/each}}
+    </ul>
+
+
+    <ul>
+      {{#if auth.authenticated}}
+        <li><a href="#" {{action 'logout'}}>Logout</a></li>
+      {{else}}
+        <li>{{#link-to 'createuser'}}Create User{{/link-to}}</li>
+        <li>{{#link-to 'login'}}Login{{/link-to}}</li>
+      {{/if}}
+    </ul>
+  </script>
+
+  <!-- LOGIN PAGE -->
+  <script type="text/x-handlebars" data-template-name="login">
+    <h1>Login to your account</h1>
+
+    <p>{{error.message}}</p>
+
+    <form {{action 'login' on="submit"}}>
+    <ul>
+      <li>
+        <label for="email">Email</label>
+        {{input type="text" value=email placeholder="Enter an email address"}}
+      </li>
+      <li>
+        <label for="Password">Password</label>
+        {{input type="password" value=password placeholder="Enter a password"}}
+      </li>
+    </ul>
+
+    {{input type="submit" value="Login"}}
+    </form>
+  </script>
+
+
+  <!-- CREATE USER PAGE -->
+  <script type="text/x-handlebars" data-template-name="createuser">
+    <h1>Create a new account</h1>
+
+    <form {{action 'create' on="submit"}}>
+    <ul>
+      <li>
+        <label for="email">Email</label>
+        {{input type="text" value=email placeholder="Enter an email address"}}
+      </li>
+      <li>
+        <label for="Password">Password</label>
+        {{input type="password" value=password placeholder="Enter a password"}}
+      </li>
+    </ul>
+      {{input type="submit" value="Create New Account"}}
+  </script>
+
+
+  <!-- //////////////////////////////////////////////////// -->
+  <!-- // COMPONENTS ////////////////////////////////////// -->
+  <!-- //////////////////////////////////////////////////// -->
+
+  <script type="text/x-handlebars" data-template-name="components/hero-full">
+    <div class="hero-content">
+    {{yield}}
+    </div>
+  </script>
+
+  <!-- BIO CARD -->
+  <script type="text/x-handlebars" data-template-name="components/bio-card">
+    <img {{bind-attr src="bio.avatar"}} />
+    <ul>
+      <li>{{bio.name}}</li>
+      <li>{{bio.location}}</li>
+    </ul>
+  </script>
+
+
+  <!-- //////////////////////////////////////////////////// -->
+  <!-- // JAVASCRIPT ////////////////////////////////////// -->
+  <!-- //////////////////////////////////////////////////// -->
+  <script src="js/libs/jquery-1.10.2.js"></script>
+  <script src="js/libs/handlebars-1.1.2.js"></script>
+  <script src="js/libs/ember-1.6.1.js"></script>
+  <script src="js/libs/ember-data-1.0.0.beta.9.js"></script>
+  <!-- Firebase -->
+  <script src="https://cdn.firebase.com/js/client/1.0.18/firebase.js"></script>
+  <!-- Firebase Simple Login -->
+  <script src="https://cdn.firebase.com/js/simple-login/1.6.2/firebase-simple-login.js"></script>
+  <!-- EmberFire -->
+  <script src="https://cdn.firebase.com/libs/emberfire/1.0.13/emberfire.min.js"></script>
+  <script src="js/libs/moment.js"></script>
+  <script src="js/libs/md5.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/routes.js"></script>
+  <script src="js/models.js"></script>
+  <script src="js/controllers.js"></script>
+  <script src="js/components.js"></script>
+
+  <!-- to activate the test runner, add the "?test" query string parameter -->
+  <script src="tests/runner.js"></script>
+</body>
+</html>

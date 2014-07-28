@@ -29,3 +29,16 @@ test("/", function() {
     equal(find("nav li").length, 3, "There are three items in the list");
   });
 });
+
+
+// QUnit test case
+test("/projects", function() {
+  // async helper telling the application to go to the '/' route
+  visit("/projects");
+
+  // helper waiting the application is idle before running the callback
+  andThen(function() {
+    equal(find("h2:first").text(), "Work");
+    equal(find("nav li").length, 3, "There are three items in the list");
+  });
+});
